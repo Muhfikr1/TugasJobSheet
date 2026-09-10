@@ -1,8 +1,6 @@
 
 // BAGIAN 1: JS Fundamentals dari Sudut Pandang Problem Solving
 
-console.log("BAGIAN 1: JS FUNDAMENTALS");
-
 // Latihan 1.1: Menghitung Harga Setelah Diskon
 function calculateDiscountedPrice(price, discountPercent) {
   return price - (price * discountPercent) / 100;
@@ -34,8 +32,6 @@ function applyDiscounts(cartItems) {
 console.log("1.2 Keranjang dengan Harga Diskon:", applyDiscounts(cart));
 
 // BAGIAN 2: Data Representation dan Array of Objects
-
-console.log("\n=== BAGIAN 2: DATA REPRESENTATION & ARRAY OF OBJECTS ===");
 
 // Dataset Awal
 const initialProducts = [
@@ -70,9 +66,7 @@ console.log("Pengecekan Immutability (Data Asli Tidak Berubah):", initialProduct
 
 // BAGIAN 3: Nested Data
 
-console.log("\n=== BAGIAN 3: NESTED DATA ===");
-
-// Dataset Produk dengan Struktur Nested (Berdasarkan Spesifikasi Jobsheet)
+// Dataset Produk dengan Struktur Nested
 const nestedProducts = [
   {
     id: 1,
@@ -165,8 +159,6 @@ const allRatingsFlat = nestedProducts.flatMap(p => p.reviews.map(r => r.rating))
 console.log("3.7 Seluruh Nilai Rating (Flat):", allRatingsFlat);
 
 // BAGIAN 4: Flattening Data
-
-console.log("\n=== BAGIAN 4: FLATTENING DATA ===");
 
 // 4.1 Ambil seluruh tags dari semua produk menjadi satu array datar menggunakan flatMap()
 const allTagsFlat = nestedProducts.flatMap(p => p.tags);
