@@ -64,9 +64,6 @@ const updatedProducts = updateStock(initialProducts, 1, 20);
 console.log("2.3 Data Baru Setelah Update Stok ID 1:", updatedProducts);
 console.log("Pengecekan Immutability (Data Asli Tidak Berubah):", initialProducts[0].stock === 5); // Output: true
 
-// BAGIAN 3: Nested Data
-
-// Dataset Produk dengan Struktur Nested
 const nestedProducts = [
   {
     id: 1,
@@ -167,3 +164,142 @@ console.log("4.1 Seluruh Tags (Flat):", allTagsFlat);
 // 4.2 Ambil seluruh comment dari semua review di semua produk menjadi satu array of strings
 const allCommentsFlat = nestedProducts.flatMap(p => p.reviews.map(r => r.comment));
 console.log("4.2 Seluruh Komentar Review (Flat Array of Strings):", allCommentsFlat);
+
+// BAGIAN 5: Map, Filter, Reduce dalam Konteks Nyata
+
+// Latihan 5.1: Rata-rata harga produk berkategori "laptops"
+function getAverageLaptopPrice(products) {
+  const laptopPrices = products
+    .filter(p => p.category === "laptops")
+    .map(p => p.price);
+
+  if (laptopPrices.length === 0) return 0;
+
+  const total = laptopPrices.reduce((sum, price) => sum + price, 0);
+  return total / laptopPrices.length;
+}
+
+console.log("5.1 Rata-rata Harga Laptop:", getAverageLaptopPrice(nestedProducts));
+
+// Latihan 5.2: Statistik Lengkap Produk
+function getStatistics(products) {
+  if (!products || products.length === 0) return null;
+
+  const totalProducts = products.length;
+  const totalPrice = products.reduce((sum, p) => sum + p.price, 0);
+  const averagePrice = Number((totalPrice / totalProducts).toFixed(2));
+
+  const prices = products.map(p => p.price);
+  const highestPrice = Math.max(...prices);
+  const lowestPrice = Math.min(...prices);
+
+  const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
+
+  const totalRating = products.reduce((sum, p) => sum + p.rating, 0);
+  const averageRating = Number((totalRating / totalProducts).toFixed(2));
+
+  return {
+    totalProducts,
+    averagePrice,
+    highestPrice,
+    lowestPrice,
+    totalStock,
+    averageRating
+  };
+}
+
+console.log("5.2 Ringkasan Statistik Produk:", getStatistics(nestedProducts));
+
+
+// BAGIAN 6: Searching (Linear Search)
+
+// Latihan 6.1: Linear Search Manual
+function linearSearch(array, target) {
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] === target) return i;
+  }
+  return -1;
+}
+
+const numbers = [10, 25, 30, 45, 50];
+console.log("6.1 Indeks angka 30:", linearSearch(numbers, 30)); 
+
+// Latihan 6.2: Linear Search Produk berdasarkan ID
+function linearSearchById(products, targetId) {
+  for (let i = 0; i < products.length; i++) {
+    if (products[i].id === targetId) return products[i];
+  }
+  return null;
+}
+
+console.log("6.2 Cari Produk ID 3:", linearSearchById(nestedProducts, 3));
+
+// BAGIAN 7: Binary Search
+
+// Latihan 7.1: Binary Search Manual (Array Terurut)
+function binarySearch(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    if (arr[mid] < target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}
+
+const sortedNumbers = [10, 20, 30, 40, 50, 60, 70];
+console.log("7.1 Indeks angka 50 (Binary Search):", binarySearch(sortedNumbers, 50)); 
+
+// Latihan 7.2: Binary Search Produk berdasarkan Price
+const sortedProductsByPrice = [...nestedProducts].sort((a, b) => a.price - b.price);
+function binarySearchByPrice(sortedProducts, targetPrice) {
+  let left = 0;
+  let right = sortedProducts.length - 1;
+
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    if (sortedProducts[mid].price === targetPrice) return sortedProducts[mid];
+    if (sortedProducts[mid].price < targetPrice) left = mid + 1;
+    else right = mid - 1;
+  }
+  return null;
+}
+
+console.log("7.2 Cari Produk dengan Harga 800:", binarySearchByPrice(sortedProductsByPrice, 800));
+
+// BAGIAN 8: Sorting
+
+// Latihan 8.1: Manual Bubble Sort (Tanpa Mutasi Array Asli)
+function bubbleSort(numbers) {
+  const arr = [...numbers]; 
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j < arr.length - 1 - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+      }
+    }
+  }
+  return arr;
+}
+
+const unsortedNumbers = [5, 3, 8, 1, 2];
+console.log("8.1 Hasil Bubble Sort Manual:", bubbleSort(unsortedNumbers));
+
+// Latihan 8.2: Sorting Produk secara Dinamis
+function sortProducts(products, sortBy) {
+  const arr = [...products]; 
+
+  return arr.sort((a, b) => {
+    if (sortBy === "price-asc") return a.price - b.price;
+    if (sortBy === "price-desc") return b.price - a.price;
+    if (sortBy === "rating") return b.rating - a.rating; 
+    if (sortBy === "title") return a.title.localeCompare(b.title);
+    return 0;
+  });
+}
+
+console.log("8.2 Urutkan Produk berdasarkan Title (A-Z):", sortProducts(nestedProducts, "title"));
+console.log("8.2 Urutkan Produk berdasarkan Rating Tertinggi:", sortProducts(nestedProducts, "rating"));
